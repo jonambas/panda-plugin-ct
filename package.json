@@ -25,6 +25,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest",
     "test:ci": "vitest run --coverage --reporter=basic"
   },
