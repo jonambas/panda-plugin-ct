@@ -4,12 +4,15 @@ import type {
   Artifact,
 } from '@pandacss/types';
 import { makePaths } from './utils';
-import type { ComponentTokens } from './types';
+import type { PluginContext } from './types';
 
 export const codegen = (
   args: CodegenPrepareHookArgs,
-  tokens: ComponentTokens,
+  context: Partial<PluginContext>,
 ): MaybeAsyncReturn<void | Artifact[]> => {
+  const tokens = context.tokens ?? {};
+  if (!tokens) return;
+
   const cssFn = args.artifacts.find((a) => a.id === 'css-fn');
   if (!cssFn) return args.artifacts;
 
@@ -31,7 +34,7 @@ export const codegen = (
     }
   
     if (typeof current !== "string") {
-      return "alias-not-found";
+      return "panda-plugin-ct-alias-not-found";
     }
   
     return current;
