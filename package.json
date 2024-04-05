@@ -29,12 +29,12 @@
   "author": "Jon Ambas <jon@jonambas.com>",
   "license": "MIT",
   "dependencies": {
-    "@pandacss/dev": "^0.37.1",
     "@pandacss/types": "^0.37.1",
     "ts-morph": "^22.0.0",
     "typescript": "^5.4.4"
   },
   "devDependencies": {
+    "prettier": "^3.2.5",
     "tsup": "^8.0.2",
     "vitest": "^1.4.0"
   }
