@@ -24,7 +24,8 @@
   },
   "sideEffects": false,
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "test": "vitest"
   },
   "author": "Jon Ambas <jon@jonambas.com>",
   "license": "MIT",

@@ -6,15 +6,16 @@ export const makePaths = (
   obj: Record<string, any>,
   prefix?: string,
 ): string[] => {
-  const keys = Object.keys(obj);
   const pathPrefix = prefix ? prefix + '.' : '';
+  const paths = [];
 
-  return keys.reduce<string[]>((acc, key) => {
-    if (isObject(obj[key])) {
-      acc = acc.concat(makePaths(obj[key], pathPrefix + key));
+  for (const [key, value] of Object.entries(obj)) {
+    if (!isObject(value) || 'value' in value) {
+      paths.push(`${pathPrefix}${key}`);
     } else {
-      acc.push(pathPrefix + key);
+      paths.push(...makePaths(value, `${pathPrefix}${key}`));
     }
-    return acc;
-  }, []);
+  }
+
+  return paths;
 };

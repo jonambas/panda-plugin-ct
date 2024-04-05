@@ -5,6 +5,7 @@ import type {
 } from '@pandacss/types';
 import { makePaths } from './utils';
 import type { PluginContext } from './types';
+import { getTemplate } from './get';
 
 export const codegen = (
   args: CodegenPrepareHookArgs,
@@ -19,26 +20,7 @@ export const codegen = (
   const cssFile = cssFn.files.find((f) => f.file.includes('css.mjs'));
   if (!cssFile) return args.artifacts;
 
-  cssFile.code += `\n
-  const ctTokens = ${JSON.stringify(tokens, null, 2)};
-
-  export const ct = (path) => {
-    const parts = path.split(".");
-    let current = ctTokens;
-  
-    for (const part of parts) {
-      if (!current[part]) {
-        break;
-      }
-      current = current[part];
-    }
-  
-    if (typeof current !== "string") {
-      return "panda-plugin-ct-alias-not-found";
-    }
-  
-    return current;
-  }`;
+  cssFile.code += getTemplate(tokens);
 
   const cssDtsFile = cssFn.files.find((f) => f.file.includes('css.d.'));
   if (!cssDtsFile) return args.artifacts;
