@@ -1,5 +1,6 @@
 import type { ParserResultBeforeHookArgs } from '@pandacss/types';
-import type { ComponentTokens, PluginContext } from './types';
+import type { PluginContext } from './types';
+import { get } from './get';
 
 export const parser = (
   args: ParserResultBeforeHookArgs,
@@ -20,24 +21,8 @@ export const parser = (
 
   const text = source.getText();
   const calls = text.match(/ct\(['"][\w.]+['"]\)/g) ?? [];
+  const ct = get(tokens);
   let newText = text;
-
-  const get = (path: string): string => {
-    const parts = path.split('.');
-    let current = tokens;
-
-    for (const part of parts) {
-      if (!current[part]) break;
-      current = current[part] as ComponentTokens;
-    }
-
-    // TODO: allow passing through style objects
-    if (typeof current !== 'string') {
-      return 'panda-plugin-ct-alias-not-found';
-    }
-
-    return current as unknown as string;
-  };
 
   for (const call of calls) {
     const path = call
@@ -45,7 +30,7 @@ export const parser = (
       ?.toString()
       .replace(/['"]/g, '');
     if (!path) continue;
-    newText = newText.replace(call, `"${get(path)}"`);
+    newText = newText.replace(call, ct(path));
   }
 
   return newText;
