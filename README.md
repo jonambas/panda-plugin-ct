@@ -57,12 +57,12 @@ Which will produce:
 }
 
 /* With ct */
-.bg_colors\.red\.500 {
+.bg_red\.500 {
   background: var(--colors-red-500);
 }
 
 /* With component-level tokens in semanticToken */
-.bg_colors\.alert\.background {
+.bg_alert\.background {
   background: var(--colors-alert-background);
 }
 ```
