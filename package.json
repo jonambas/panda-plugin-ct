@@ -41,5 +41,11 @@
     "tsup": "8.0.2",
     "typescript": "5.4.4",
     "vitest": "1.4.0"
-  }
+  },
+  "keywords": [
+    "panda",
+    "pandacss",
+    "plugin",
+    "typescript"
+  ]
 }
