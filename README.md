@@ -12,8 +12,8 @@ export default defineConfig({
   plugins: [
     pluginComponentTokens({
       alert: {
-        background: "{colors.red.100}",
-        text: "{colors.text.100}",
+        background: "red.500",
+        text: "gray.100",
       },
     }),
   ],
@@ -22,6 +22,7 @@ export default defineConfig({
 
 ```tsx
 // Component code
+
 import { css, ct } from "../../styled-system/css";
 
 <div className={css({
@@ -29,4 +30,36 @@ import { css, ct } from "../../styled-system/css";
   background: ct('alert.background')
 })}>
 
+```
+
+Which will produce:
+
+```html
+<!-- With ct -->
+<div class="d_flex bg_red.500" />
+
+<!-- With component-level tokens in semanticToken -->
+<div class="d_flex bg_alert.background" />
+```
+
+```css
+/* With ct */
+--colors-red-500: #ef4444;
+
+/* With component-level tokens in semanticToken */
+--colors-alert-background: var(--colors-red-500);
+
+.d_flex {
+  display: flex;
+}
+
+/* With ct */
+.bg_colors\.red\.500 {
+  background: var(--colors-red-500);
+}
+
+/* With component-level tokens in semanticToken */
+.bg_colors\.alert\.background {
+  background: var(--colors-alert-background);
+}
 ```
