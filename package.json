@@ -2,22 +2,40 @@
   "name": "panda-plugin-ct",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "src",
     "dist"
   ],
-  "scripts": {
-    "build": "tsup",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
   },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup"
+  },
+  "author": "Jon Ambas <jon@jonambas.com>",
+  "license": "MIT",
+  "dependencies": {
     "@pandacss/dev": "^0.37.1",
     "@pandacss/types": "^0.37.1",
+    "ts-morph": "^22.0.0",
+    "typescript": "^5.4.4"
+  },
+  "devDependencies": {
     "tsup": "^8.0.2",
-    "typescript": "^5.4.4",
     "vitest": "^1.4.0"
   }
 }
