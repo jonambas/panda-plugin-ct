@@ -31,7 +31,7 @@
   "author": "Jon Ambas <jon@jonambas.com>",
   "license": "MIT",
   "dependencies": {
-    "@pandacss/types": "0.37.1",
+    "@pandacss/types": "0.37.2",
     "ts-morph": "22.0.0",
     "typescript": "5.4.4"
   },
