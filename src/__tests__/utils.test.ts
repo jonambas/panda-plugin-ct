@@ -17,8 +17,12 @@ describe('isObject', () => {
 
 describe('makePaths', () => {
   it('makes paths', () => {
-    expect(makePaths({ foo: { 100: '', 200: '' }, bar: { 100: '', 200: '' } }))
-      .toMatchInlineSnapshot(`
+    expect(
+      makePaths({
+        foo: { 100: { value: '#fff' }, 200: '' },
+        bar: { 100: '', 200: '' },
+      }),
+    ).toMatchInlineSnapshot(`
         [
           "foo.100",
           "foo.200",
@@ -28,11 +32,11 @@ describe('makePaths', () => {
       `);
   });
 
-  it.only('makes paths with object values', () => {
+  it('makes paths with object values', () => {
     expect(
       makePaths({
         foo: { a: { b: { c: { value: { base: '', lg: '' } } } } },
-        bar: { baz: { 100: { value: {} }, 200: { value: {} } } },
+        bar: { baz: { 100: { value: '#fff' }, 200: { value: {} } } },
       }),
     ).toMatchInlineSnapshot(`
       [

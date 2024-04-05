@@ -16,20 +16,24 @@ export const get =
       current = current[part] as ComponentTokens;
     }
 
-    if (isObject(current)) {
-      return 'value' in current
-        ? JSON.stringify(current.value, null, 2)
-        : missing;
+    if (typeof current === 'string') {
+      return `"${current}"`;
     }
 
-    return `"${current}"`;
+    if (isObject(current) && 'value' in current) {
+      return typeof current.value === 'string'
+        ? `"${current.value}"`
+        : JSON.stringify(current.value);
+    }
+
+    return missing;
   };
 
-export const getTemplate = (tokens: ComponentTokens) => `\n
+export const getTemplate = (tokens: ComponentTokens) => `
 const pluginCtTokens = ${JSON.stringify(tokens, null, 2)};
 
 export const ct = (path) => {
-  if (!path) return "${missing}";
+  if (!path) return ${missing};
 
   const parts = path.split('.');
   let current = pluginCtTokens;
@@ -39,10 +43,14 @@ export const ct = (path) => {
     current = current[part];
   }
 
-  if (typeof current === 'object' && current != null && !Array.isArray(current)) {
-    return 'value' in current ? current.value : "${missing}";
+  if (typeof current === 'string') {
+    return current;
   }
-
-  return current;
+  
+  if (typeof current === 'object' && current != null && !Array.isArray(current) && 'value' in current) {
+    return current.value;
+  }
+  
+  return ${missing};
 };
 `;
