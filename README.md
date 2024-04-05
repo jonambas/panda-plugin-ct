@@ -1,6 +1,6 @@
 # panda-plugin-ct
 
-Allows aliases to tokens without producing recipe or component level class names.
+Allows aliases to tokens without preserving atomic class names.
 
 ```ts
 // panda.config.ts
