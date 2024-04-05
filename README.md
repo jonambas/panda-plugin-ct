@@ -1,19 +1,21 @@
 # panda-plugin-ct
 
-Allows aliases to tokens while preserving atomic class names.
+Allows aliases to tokens without generating alias or component level class names.
+
+The plugin allows you to structure your tokens in a way makes sense to you, and does not need to adhere to Panda's token structure.
 
 ```ts
 // panda.config.ts
 
-import { defineConfig } from "@pandacss/dev";
-import { pluginComponentTokens } from "panda-plugin-ct";
+import { defineConfig } from '@pandacss/dev';
+import { pluginComponentTokens } from 'panda-plugin-ct';
 
 export default defineConfig({
   plugins: [
     pluginComponentTokens({
       alert: {
-        background: "red.500",
-        text: "gray.100",
+        background: 'red.500',
+        text: 'gray.100',
       },
     }),
   ],
@@ -27,6 +29,7 @@ import { css, ct } from "../../styled-system/css";
 
 <div className={css({
   display: 'flex',
+  // Token paths are fully typed
   background: ct('alert.background')
 })}>
 
