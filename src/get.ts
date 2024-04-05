@@ -27,10 +27,9 @@ export const get =
 
 export const getTemplate = (tokens: ComponentTokens) => `\n
 const pluginCtTokens = ${JSON.stringify(tokens, null, 2)};
-const missing = "panda-plugin-ct-alias-not-found";
 
 export const ct = (path) => {
-  if (!path) return missing;
+  if (!path) return "${missing}";
 
   const parts = path.split('.');
   let current = pluginCtTokens;
@@ -41,7 +40,7 @@ export const ct = (path) => {
   }
 
   if (typeof current === 'object' && current != null && !Array.isArray(current)) {
-    return 'value' in current ? current.value : missing;
+    return 'value' in current ? current.value : "${missing}";
   }
 
   return current;

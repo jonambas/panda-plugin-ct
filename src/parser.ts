@@ -30,8 +30,8 @@ export const parser = (
       .replace(/['"]/g, '');
     if (!path) continue;
 
-    const getToken = get(tokens);
-    newText = newText.replace(call, getToken(path));
+    const ct = get(tokens);
+    newText = newText.replace(call, ct(path));
   }
 
   return newText;
