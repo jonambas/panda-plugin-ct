@@ -1,0 +1,23 @@
+{
+  "name": "panda-plugin-ct",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@pandacss/dev": "^0.37.1",
+    "@pandacss/types": "^0.37.1",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.4",
+    "vitest": "^1.4.0"
+  }
+}
