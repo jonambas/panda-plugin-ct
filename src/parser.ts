@@ -1,5 +1,5 @@
 import type { ParserResultBeforeHookArgs } from "@pandacss/types";
-import { Project, ts } from "ts-morph";
+import { Project } from "ts-morph";
 import { ComponentTokens } from "./types";
 
 export const parser = (
@@ -13,9 +13,7 @@ export const parser = (
     let current = tokens;
 
     for (const part of parts) {
-      if (!current[part]) {
-        break;
-      }
+      if (!current[part]) break;
       current = current[part] as ComponentTokens;
     }
 
@@ -26,13 +24,7 @@ export const parser = (
     return current as unknown as string;
   };
 
-  const project = new Project({
-    useInMemoryFileSystem: true,
-    compilerOptions: {
-      target: ts.ScriptTarget.ESNext,
-    },
-  });
-
+  const project = new Project();
   const source = project.createSourceFile("__temp-ct-parser.ts", content, {
     overwrite: true,
   });
@@ -47,25 +39,18 @@ export const parser = (
     });
   });
 
-  if (!hasCt) {
-    return;
-  }
+  if (!hasCt) return;
 
   const text = source.getText();
-  let newText = text;
-
   const calls = text.match(/ct\(['"][\w.]+['"]\)/g) ?? [];
+  let newText = text;
 
   for (const call of calls) {
     const path = call
       .match(/['"][\w.]+['"]/)
       ?.toString()
       .replace(/['"]/g, "");
-
-    if (!path) {
-      continue;
-    }
-
+    if (!path) continue;
     newText = newText.replace(call, `"${get(path)}"`);
   }
 

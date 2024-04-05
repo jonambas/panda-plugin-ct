@@ -10,12 +10,7 @@ export const codegen = (
   args: CodegenPrepareHookArgs,
   tokens: ComponentTokens
 ): MaybeAsyncReturn<void | Artifact[]> => {
-  const paths = makePaths(tokens)
-    .map((key) => `"${key}"`)
-    .join(" | ");
-
   const cssFn = args.artifacts.find((a) => a.id === "css-fn");
-
   if (!cssFn) return;
 
   const cssFile = cssFn.files.find((f) => f.file.includes("css.mjs"));
@@ -45,5 +40,8 @@ export const codegen = (
   const cssDtsFile = cssFn.files.find((f) => f.file.includes("css.d."));
   if (!cssDtsFile) return;
 
+  const paths = makePaths(tokens)
+    .map((key) => `"${key}"`)
+    .join(" | ");
   cssDtsFile.code += `\nexport const ct: (alias: ${paths}) => string;`;
 };

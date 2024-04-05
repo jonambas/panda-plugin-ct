@@ -1,4 +1,4 @@
-import type { Config, PandaPlugin } from "@pandacss/types";
+import type { PandaPlugin } from "@pandacss/types";
 import { parser } from "./parser";
 import { codegen } from "./codegen";
 import { ComponentTokens } from "./types";
