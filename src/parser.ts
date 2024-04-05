@@ -1,43 +1,27 @@
-import type { ParserResultBeforeHookArgs } from "@pandacss/types";
-import { Project } from "ts-morph";
-import { ComponentTokens } from "./types";
+import type { ParserResultBeforeHookArgs } from '@pandacss/types';
+import { Project } from 'ts-morph';
+import type { ComponentTokens } from './types';
 
 export const parser = (
   args: ParserResultBeforeHookArgs,
-  tokens: ComponentTokens
+  tokens: ComponentTokens,
 ): string | void => {
   const { content } = args;
-
-  const get = (path: string): string => {
-    const parts = path.split(".");
-    let current = tokens;
-
-    for (const part of parts) {
-      if (!current[part]) break;
-      current = current[part] as ComponentTokens;
-    }
-
-    if (typeof current !== "string") {
-      return "alias-not-found";
-    }
-
-    return current as unknown as string;
-  };
-
   const project = new Project();
-  const source = project.createSourceFile("__temp-ct-parser.ts", content, {
+  const source = project.createSourceFile('__temp-ct-parser.ts', content, {
     overwrite: true,
   });
 
   let hasCt = false;
 
-  source.getImportDeclarations().forEach((node) => {
-    node.getNamedImports().forEach((named) => {
-      if (named.getName() === "ct") {
+  for (const node of source.getImportDeclarations()) {
+    for (const named of node.getNamedImports()) {
+      if (named.getName() === 'ct') {
         hasCt = true;
       }
-    });
-  });
+    }
+    if (hasCt) break;
+  }
 
   if (!hasCt) return;
 
@@ -45,11 +29,27 @@ export const parser = (
   const calls = text.match(/ct\(['"][\w.]+['"]\)/g) ?? [];
   let newText = text;
 
+  const get = (path: string): string => {
+    const parts = path.split('.');
+    let current = tokens;
+
+    for (const part of parts) {
+      if (!current[part]) break;
+      current = current[part] as ComponentTokens;
+    }
+
+    if (typeof current !== 'string') {
+      return 'alias-not-found';
+    }
+
+    return current as unknown as string;
+  };
+
   for (const call of calls) {
     const path = call
       .match(/['"][\w.]+['"]/)
       ?.toString()
-      .replace(/['"]/g, "");
+      .replace(/['"]/g, '');
     if (!path) continue;
     newText = newText.replace(call, `"${get(path)}"`);
   }

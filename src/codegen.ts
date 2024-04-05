@@ -2,19 +2,19 @@ import type {
   CodegenPrepareHookArgs,
   MaybeAsyncReturn,
   Artifact,
-} from "@pandacss/types";
-import { makePaths } from "./utils";
-import { ComponentTokens } from "./types";
+} from '@pandacss/types';
+import { makePaths } from './utils';
+import type { ComponentTokens } from './types';
 
 export const codegen = (
   args: CodegenPrepareHookArgs,
-  tokens: ComponentTokens
+  tokens: ComponentTokens,
 ): MaybeAsyncReturn<void | Artifact[]> => {
-  const cssFn = args.artifacts.find((a) => a.id === "css-fn");
-  if (!cssFn) return;
+  const cssFn = args.artifacts.find((a) => a.id === 'css-fn');
+  if (!cssFn) return args.artifacts;
 
-  const cssFile = cssFn.files.find((f) => f.file.includes("css.mjs"));
-  if (!cssFile) return;
+  const cssFile = cssFn.files.find((f) => f.file.includes('css.mjs'));
+  if (!cssFile) return args.artifacts;
 
   cssFile.code += `\n
   const ctTokens = ${JSON.stringify(tokens, null, 2)};
@@ -37,11 +37,13 @@ export const codegen = (
     return current;
   }`;
 
-  const cssDtsFile = cssFn.files.find((f) => f.file.includes("css.d."));
-  if (!cssDtsFile) return;
+  const cssDtsFile = cssFn.files.find((f) => f.file.includes('css.d.'));
+  if (!cssDtsFile) return args.artifacts;
 
   const paths = makePaths(tokens)
     .map((key) => `"${key}"`)
-    .join(" | ");
+    .join(' | ');
   cssDtsFile.code += `\nexport const ct: (alias: ${paths}) => string;`;
+
+  return args.artifacts;
 };

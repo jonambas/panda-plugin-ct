@@ -1,13 +1,13 @@
 export const isObject = (value: any) => {
-  return typeof value === "object" && value != null && !Array.isArray(value);
+  return typeof value === 'object' && value != null && !Array.isArray(value);
 };
 
 export const makePaths = (
   obj: Record<string, any>,
-  prefix?: string
+  prefix?: string,
 ): string[] => {
   const keys = Object.keys(obj);
-  const pathPrefix = prefix ? prefix + "." : "";
+  const pathPrefix = prefix ? prefix + '.' : '';
 
   return keys.reduce<string[]>((acc, key) => {
     if (isObject(obj[key])) {
