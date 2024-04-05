@@ -21,6 +21,7 @@ export const parser = (
 
   const text = source.getText();
   const calls = text.match(/ct\(['"][\w.]+['"]\)/g) ?? [];
+  const ct = get(tokens);
   let newText = text;
 
   for (const call of calls) {
@@ -29,8 +30,6 @@ export const parser = (
       ?.toString()
       .replace(/['"]/g, '');
     if (!path) continue;
-
-    const ct = get(tokens);
     newText = newText.replace(call, ct(path));
   }
 
