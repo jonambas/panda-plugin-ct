@@ -31,14 +31,14 @@
   "author": "Jon Ambas <jon@jonambas.com>",
   "license": "MIT",
   "dependencies": {
-    "@pandacss/types": "^0.37.1",
-    "ts-morph": "^22.0.0",
-    "typescript": "^5.4.4"
+    "@pandacss/types": "0.37.1",
+    "ts-morph": "22.0.0",
+    "typescript": "5.4.4"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^1.4.0",
-    "prettier": "^3.2.5",
-    "tsup": "^8.0.2",
-    "vitest": "^1.4.0"
+    "@vitest/coverage-v8": "1.4.0",
+    "prettier": "3.2.5",
+    "tsup": "8.0.2",
+    "vitest": "1.4.0"
   }
 }
