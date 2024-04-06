@@ -53,7 +53,7 @@ describe('mapTemplate', () => {
     expect(mapTemplate(map)).toMatchInlineSnapshot(
       `
       "
-      const pluginCtMap = new Map(JSON.parse('[["foo.100","#fff"],["foo.200",{"base":"#000"}]]'));
+      const pluginCtMap = new Map([["foo.100","#fff"],["foo.200",{"base":"#000"}]]);
       "
     `,
     );

@@ -56,4 +56,4 @@ const serializeMap = (map: Map<any, any>) => {
 
 // Generate a template string for the token alias Map.
 export const mapTemplate = (map: Map<string, any>) =>
-  `\nconst pluginCtMap = new Map(JSON.parse('${serializeMap(map)}'));\n`;
+  `\nconst pluginCtMap = new Map(${serializeMap(map)});\n`;
