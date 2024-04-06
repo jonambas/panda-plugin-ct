@@ -1,7 +1,7 @@
 import type { ComponentTokens } from './types';
 import { isObject, isObjectWithValue } from './utils';
 
-export const get = <T extends string>(tokens: ComponentTokens, path: T) => {
+export const get = (tokens: ComponentTokens, path: string) => {
   const parts = path.split('.');
   let current = tokens;
 
