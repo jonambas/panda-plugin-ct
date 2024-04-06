@@ -1,6 +1,6 @@
 # panda-plugin-ct
 
-Allows aliases to tokens without generating alias or component level class names.
+Allows aliases to tokens without generating alias-level class names.
 
 The plugin allows you to structure your tokens in a way makes sense to you, and does not need to adhere to Panda's token structure.
 
@@ -73,8 +73,6 @@ Which will produce:
 This plugin supports aliasing to Panda's object syntax via a `value` key, just as you would define styles with conditions in Panda's theme.
 
 ```ts
-// panda.config.ts
-
 export default defineConfig({
   plugins: [
     pluginComponentTokens({
@@ -106,3 +104,12 @@ Produces:
 ```html
 <div class="bg_red.500 text_gray.900 lg:text_gray.300" />
 ```
+
+---
+
+### Alternatives
+
+There are alternatives to achieve the same result.
+
+- Use Panda's `importMap` in config to reference your own alias to token mapping.
+- Use `@pandabox/unplugin` to strip out and remove your own alias mapping at build time.
