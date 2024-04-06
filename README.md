@@ -102,7 +102,7 @@ export default defineConfig({
 Produces:
 
 ```html
-<div class="bg_red.500 text_gray.900 lg:text_gray.300" />
+<div class="bg_red.500 lg:bg_blue.500 text_gray.100" />
 ```
 
 ---
