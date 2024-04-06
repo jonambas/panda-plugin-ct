@@ -18,13 +18,13 @@ export const codegen = (
   const cssFile = cssFn.files.find((f) => f.file.includes('css.mjs'));
   if (!cssFile) return args.artifacts;
 
+  cssFile.code += '\n\n/* panda-plugin-ct codegen */';
   cssFile.code += mapTemplate(map);
   cssFile.code += `
   export const ct = (path) => {
-    if (!pluginCtMap.has(path)) return 'panda-plugin-ct-alias-not-found';
+    if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
     return pluginCtMap.get(path);
-  };
-  `;
+  };`;
 
   const cssDtsFile = cssFn.files.find((f) => f.file.includes('css.d.'));
   if (!cssDtsFile) return args.artifacts;
