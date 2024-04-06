@@ -28,12 +28,11 @@ describe('codegen', () => {
         "code": "
       const pluginCtMap = new Map(JSON.parse('[["foo.100","#fff"],["foo.200",{"base":"#000"}],["bar.100","red"],["bar.200","blue"]]'));
 
-      export const ct = (path) => {
-        if (!path) return 'panda-plugin-ct-path-empty';
-        if (!pluginCtMap.has(path)) return 'panda-plugin-ct-alias-not-found';
-        return pluginCtMap.get(path);
-      };
-      ",
+        export const ct = (path) => {
+          if (!pluginCtMap.has(path)) return 'panda-plugin-ct-alias-not-found';
+          return pluginCtMap.get(path);
+        };
+        ",
         "file": "css.mjs",
       }
     `);

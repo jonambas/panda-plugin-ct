@@ -1,6 +1,20 @@
-import { ct } from './ct';
 import type { ComponentTokens } from './types';
-import { isObject } from './utils';
+import { isObject, isObjectWithValue } from './utils';
+
+export const get = <T extends string>(tokens: ComponentTokens, path: T) => {
+  const parts = path.split('.');
+  let current = tokens;
+
+  for (const part of parts) {
+    if (!current[part]) break;
+    current = current[part] as ComponentTokens;
+  }
+
+  if (typeof current === 'string') return current;
+  if (isObjectWithValue(current)) return current.value;
+
+  return;
+};
 
 // Create an array of all string paths from an object.
 export const makePaths = (
@@ -26,7 +40,7 @@ export const makeMap = (tokens: ComponentTokens) => {
   const map = new Map<string, string | object>();
 
   for (const path of makePaths(tokens)) {
-    const value = ct(tokens, path);
+    const value = get(tokens, path);
     if (value) {
       map.set(path, value);
     }

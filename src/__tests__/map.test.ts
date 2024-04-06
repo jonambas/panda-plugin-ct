@@ -1,9 +1,34 @@
-import { makeMap, makePaths, mapTemplate } from '../map';
+import { get, makeMap, makePaths, mapTemplate } from '../map';
 
 const tokens = {
   foo: { 100: { value: '#fff' }, 200: { value: { base: '#000' } } },
   bar: { 100: 'red', 200: 'blue' },
 };
+
+describe('get', () => {
+  it('gets a string', () => {
+    expect(get(tokens, 'bar.100')).toBe('red');
+  });
+
+  it('gets a value object', () => {
+    expect(get(tokens, 'foo.200')).toMatchInlineSnapshot(
+      `
+      {
+        "base": "#000",
+      }
+    `,
+    );
+  });
+
+  it('gets a value string', () => {
+    expect(get(tokens, 'foo.100')).toMatchInlineSnapshot(`"#fff"`);
+  });
+
+  it('gets an undefined token', () => {
+    expect(get(tokens, 'nope.nope')).toBeUndefined();
+    expect(get(tokens, 'foo.baz')).toBeUndefined();
+  });
+});
 
 describe('makePaths', () => {
   it('makes paths', () => {

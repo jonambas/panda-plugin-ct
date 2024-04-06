@@ -5,7 +5,6 @@ import type {
 } from '@pandacss/types';
 import { makePaths, mapTemplate } from './map';
 import type { PluginContext } from './types';
-import { ctTemplate } from './ct';
 
 export const codegen = (
   args: CodegenPrepareHookArgs,
@@ -20,7 +19,12 @@ export const codegen = (
   if (!cssFile) return args.artifacts;
 
   cssFile.code += mapTemplate(map);
-  cssFile.code += ctTemplate;
+  cssFile.code += `
+  export const ct = (path) => {
+    if (!pluginCtMap.has(path)) return 'panda-plugin-ct-alias-not-found';
+    return pluginCtMap.get(path);
+  };
+  `;
 
   const cssDtsFile = cssFn.files.find((f) => f.file.includes('css.d.'));
   if (!cssDtsFile) return args.artifacts;
