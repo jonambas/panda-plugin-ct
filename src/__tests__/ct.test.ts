@@ -1,29 +1,27 @@
 import { ct, ctTemplate } from '../ct';
 
 const tokens = {
-  foo: { a: { b: { c: { value: { base: '10px', lg: '20px' } } } } },
-  bar: { baz: { 100: { value: {} }, 200: { value: {} } } },
-  baz: { 100: 'hello', 200: { value: 'goodbye' } },
+  foo: { 100: { value: '#fff' }, 200: { value: { base: '#000' } } },
+  bar: { 100: 'red', 200: 'blue' },
 };
 
 describe('ct', () => {
   it('gets a string', () => {
-    expect(ct(tokens, 'baz.100')).toBe('hello');
+    expect(ct(tokens, 'bar.100')).toBe('red');
   });
 
   it('gets a value object', () => {
-    expect(ct(tokens, 'foo.a.b.c')).toMatchInlineSnapshot(
+    expect(ct(tokens, 'foo.200')).toMatchInlineSnapshot(
       `
       {
-        "base": "10px",
-        "lg": "20px",
+        "base": "#000",
       }
     `,
     );
   });
 
   it('gets a value string', () => {
-    expect(ct(tokens, 'baz.200')).toMatchInlineSnapshot(`"goodbye"`);
+    expect(ct(tokens, 'foo.100')).toMatchInlineSnapshot(`"#fff"`);
   });
 
   it('gets an undefined token', () => {

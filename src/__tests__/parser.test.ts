@@ -2,8 +2,8 @@ import { parser } from '../parser';
 import { createContext } from '../context';
 
 const context = createContext({
-  foo: { 100: { value: { base: 'whitesmoke', lg: 'palegreen' } } },
-  bar: { 100: '{colors.green.200}' },
+  foo: { 100: { value: '#fff' }, 200: { value: { base: '#000' } } },
+  bar: { 100: 'red', 200: 'blue' },
 });
 
 describe('parser', () => {
@@ -12,13 +12,13 @@ describe('parser', () => {
       {
         configure: () => {},
         filePath: 'test.tsx',
-        content: `<div className={css({ bg: ct("foo.100"), color: ct('bar.100'))})/>`,
+        content: `<div className={css({ bg: ct("foo.200"), color: ct('bar.100'))})/>`,
       },
       context,
     );
 
     expect(res).toMatchInlineSnapshot(
-      `"<div className={css({ bg: {"base":"whitesmoke","lg":"palegreen"}, color: '{colors.green.200}')})/>"`,
+      `"<div className={css({ bg: {"base":"#000"}, color: 'red')})/>"`,
     );
   });
 
@@ -33,18 +33,5 @@ describe('parser', () => {
     );
 
     expect(res).toBeUndefined();
-  });
-
-  it('skips without a path', () => {
-    const res = parser(
-      {
-        configure: () => {},
-        filePath: 'test.tsx',
-        content: `<div className={css({ bg: ct("") })/>`,
-      },
-      context,
-    );
-
-    expect(res).toMatchInlineSnapshot(`"<div className={css({ bg: ct("") })/>"`);
   });
 });

@@ -3,8 +3,8 @@ import { codegen } from '../codegen';
 import { createContext } from '../context';
 
 const context = createContext({
-  foo: { 100: { value: { base: 'whitesmoke', lg: 'palegreen' } } },
-  bar: { 100: '{colors.green.200}' },
+  foo: { 100: { value: '#fff' }, 200: { value: { base: '#000' } } },
+  bar: { 100: 'red', 200: 'blue' },
 });
 
 const args: CodegenPrepareHookArgs = {
@@ -26,7 +26,7 @@ describe('codegen', () => {
     expect(result[0].files[0]).toMatchInlineSnapshot(`
       {
         "code": "
-      const pluginCtMap = new Map(JSON.parse('[["foo.100",{"base":"whitesmoke","lg":"palegreen"}],["bar.100","{colors.green.200}"]]'));
+      const pluginCtMap = new Map(JSON.parse('[["foo.100","#fff"],["foo.200",{"base":"#000"}],["bar.100","red"],["bar.200","blue"]]'));
 
       export const ct = (path) => {
         if (!path) return 'panda-plugin-ct-path-empty';
@@ -41,7 +41,7 @@ describe('codegen', () => {
     expect(result[0].files[1]).toMatchInlineSnapshot(`
       {
         "code": "
-      export const ct: (alias: "foo.100" | "bar.100") => string;",
+      export const ct: (alias: "foo.100" | "foo.200" | "bar.100" | "bar.200") => string;",
         "file": "css.d.ts",
       }
     `);
