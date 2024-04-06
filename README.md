@@ -32,7 +32,6 @@ import { css, ct } from "../../styled-system/css";
   // Token paths are fully typed
   background: ct('alert.background')
 })}>
-
 ```
 
 Which will produce:
@@ -65,4 +64,45 @@ Which will produce:
 .bg_alert\.background {
   background: var(--colors-alert-background);
 }
+```
+
+---
+
+### Supported Syntax
+
+This plugin supports aliasing to Panda's object syntax via a `value` key, just as you would define styles with conditions in Panda's theme.
+
+```ts
+// panda.config.ts
+
+export default defineConfig({
+  plugins: [
+    pluginComponentTokens({
+      alert: {
+        background: {
+          value: {
+            base: 'red.500',
+            lg: 'blue.500',
+          },
+        },
+        text: {
+          value: 'gray.100',
+        },
+      },
+    }),
+  ],
+});
+```
+
+```tsx
+<div className={css({
+  background: ct('alert.background'),
+  color: ct('alert.text'),
+})}>
+```
+
+Produces:
+
+```html
+<div class="bg_red.500 text_gray.900 lg:text_gray.300" />
 ```
