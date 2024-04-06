@@ -1,15 +1,12 @@
 import type { ParserResultBeforeHookArgs } from '@pandacss/types';
 import type { PluginContext } from './types';
-import { get } from './get';
+import { isObject } from './utils';
 
 export const parser = (
   args: ParserResultBeforeHookArgs,
-  context: Partial<PluginContext>,
+  context: PluginContext,
 ): string | void => {
-  const tokens = context.tokens ?? {};
-  const project = context.project;
-
-  if (!tokens || !project) return;
+  const { project, map } = context;
 
   // TODO: handle `import { ct as xyz }` aliasing
   const content = args.content;
@@ -19,10 +16,8 @@ export const parser = (
     overwrite: true,
   });
 
-  const text = source.getText();
+  let text = source.getText();
   const calls = text.match(/ct\(['"][\w.]+['"]\)/g) ?? [];
-  const ct = get(tokens);
-  let newText = text;
 
   for (const call of calls) {
     const path = call
@@ -30,8 +25,12 @@ export const parser = (
       ?.toString()
       .replace(/['"]/g, '');
     if (!path) continue;
-    newText = newText.replace(call, ct(path));
+    const value = map.get(path);
+    text = text.replace(
+      call,
+      isObject(value) ? JSON.stringify(value) : `'${value}'`,
+    );
   }
 
-  return newText;
+  return text;
 };

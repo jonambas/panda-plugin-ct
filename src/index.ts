@@ -1,25 +1,23 @@
 import type { PandaPlugin } from '@pandacss/types';
 import { parser } from './parser';
 import { codegen } from './codegen';
-import { createProject } from './create-project';
-import type { ComponentTokens, PluginContext } from './types';
+import { createContext } from './context';
+import type { ComponentTokens } from './types';
+import { makeMap } from './map';
 
 /**
- *
+ * @see https://github.com/jonambas/panda-plugin-ct
  */
 const pluginComponentTokens = (tokens: ComponentTokens): PandaPlugin => {
-  const context: Partial<PluginContext> = {};
+  const context = createContext(tokens);
   return {
     name: 'panda-plugin-ct',
     hooks: {
-      'config:resolved': () => {
-        context.project = createProject();
-        context.tokens = tokens;
-      },
       'parser:before': (args) => {
         return parser(args, context);
       },
       'codegen:prepare': (args) => {
+        context.map = makeMap(tokens);
         return codegen(args, context);
       },
     },
