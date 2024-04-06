@@ -3,16 +3,15 @@ import type {
   MaybeAsyncReturn,
   Artifact,
 } from '@pandacss/types';
-import { makePaths } from './utils';
+import { makePaths, mapTemplate } from './map';
 import type { PluginContext } from './types';
-import { getTemplate } from './get';
+import { ctTemplate } from './ct';
 
 export const codegen = (
   args: CodegenPrepareHookArgs,
-  context: Partial<PluginContext>,
+  context: PluginContext,
 ): MaybeAsyncReturn<void | Artifact[]> => {
-  const tokens = context.tokens ?? {};
-  if (!tokens) return;
+  const { tokens, map } = context;
 
   const cssFn = args.artifacts.find((a) => a.id === 'css-fn');
   if (!cssFn) return args.artifacts;
@@ -20,7 +19,8 @@ export const codegen = (
   const cssFile = cssFn.files.find((f) => f.file.includes('css.mjs'));
   if (!cssFile) return args.artifacts;
 
-  cssFile.code += getTemplate(tokens);
+  cssFile.code += mapTemplate(map);
+  cssFile.code += ctTemplate;
 
   const cssDtsFile = cssFn.files.find((f) => f.file.includes('css.d.'));
   if (!cssDtsFile) return args.artifacts;

@@ -1,7 +1,9 @@
 import { Project, ts } from 'ts-morph';
+import type { ComponentTokens, PluginContext } from './types';
+import { makeMap } from './map';
 
-export const createProject = () => {
-  return new Project({
+export const createContext = (tokens: ComponentTokens): PluginContext => ({
+  project: new Project({
     compilerOptions: {
       jsx: ts.JsxEmit.React,
       jsxFactory: 'React.createElement',
@@ -16,5 +18,7 @@ export const createProject = () => {
     skipAddingFilesFromTsConfig: true,
     skipFileDependencyResolution: true,
     skipLoadingLibFiles: true,
-  });
-};
+  }),
+  tokens,
+  map: makeMap(tokens),
+});
