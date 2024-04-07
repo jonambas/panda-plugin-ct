@@ -6,7 +6,7 @@ import type {
 } from '@pandacss/types';
 import { makePaths, mapTemplate } from './map';
 import type { PluginContext } from './types';
-import { serializeValue } from './utils';
+import { serializeMapTypes, serializeValue } from './utils';
 
 export const codegen = (
   args: CodegenPrepareHookArgs,
@@ -20,20 +20,19 @@ export const codegen = (
 
   if (!cssFn || !indexFile || !indexDtsFile) return args.artifacts;
 
-  const code = `${mapTemplate(map)}
+  const ctFile: ArtifactContent = {
+    file: 'ct.mjs',
+    code: `${mapTemplate(map)}
   export const ct = (path) => {
     if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
     return pluginCtMap.get(path);
-  };`;
+  };`,
+  };
 
-  const paths = makePaths(tokens)
-    .map((key) => `"${key}"`)
-    .join(' | ');
-
-  const ctFile: ArtifactContent = { file: 'ct.mjs', code };
   const ctDtsFile: ArtifactContent = {
     file: 'ct.d.ts',
-    code: `export const ct: (alias: ${paths}) => string;`,
+    code: `${serializeMapTypes(map)}
+    \nexport const ct: <T extends keyof typeof pluginCtMap>(alias: T) => typeof pluginCtMap[T];`,
   };
 
   cssFn.files.push(ctFile, ctDtsFile);

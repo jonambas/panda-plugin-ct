@@ -37,7 +37,14 @@ describe('codegen', () => {
               "file": "ct.mjs",
             },
             {
-              "code": "export const ct: (alias: "foo.100" | "foo.200" | "bar.100" | "bar.200") => string;",
+              "code": "const pluginCtMap = {
+        'foo.100': '#fff',
+        'foo.200': {"base":"#000","lg":"#111"},
+        'bar.100': 'red',
+        'bar.200': 'blue',
+      } as const;
+          
+      export const ct: <T extends keyof typeof pluginCtMap>(alias: T) => typeof pluginCtMap[T];",
               "file": "ct.d.ts",
             },
           ],
