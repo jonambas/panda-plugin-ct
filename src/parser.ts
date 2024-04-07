@@ -1,6 +1,7 @@
 import type { ParserResultBeforeHookArgs } from '@pandacss/types';
 import type { PluginContext } from './types';
 import { isObject } from './utils';
+import { ts } from 'ts-morph';
 
 export const parser = (
   args: ParserResultBeforeHookArgs,
@@ -8,29 +9,41 @@ export const parser = (
 ): string | void => {
   const { project, map } = context;
 
-  // TODO: handle `import { ct as xyz }` aliasing
-  const content = args.content;
-  if (!content.includes('ct(')) return;
-
-  const source = project.createSourceFile('__temp-ct-parser.ts', content, {
+  // Note: parser won't replace `ct` calls in JSX without .tsx
+  const source = project.createSourceFile('__ct-parser.tsx', args.content, {
     overwrite: true,
   });
 
-  let text = source.getText();
-  const calls = text.match(/ct\(['"][\w.]+['"]\)/g) ?? [];
+  let ctExists = false;
+  let ctReplaced = false;
+  let ctAlias = 'ct';
 
-  for (const call of calls) {
-    const path = call
-      .match(/['"][\w.]+['"]/)
-      ?.toString()
-      .replace(/['"]/g, '');
-    if (!path) continue;
-    const value = map.get(path);
-    text = text.replace(
-      call,
-      isObject(value) ? JSON.stringify(value) : `'${value}'`,
-    );
+  for (const node of source.getImportDeclarations()) {
+    if (!node.getText().includes('ct')) continue;
+    for (const named of node.getNamedImports()) {
+      if (named.getText() === 'ct') {
+        ctExists = true;
+        ctAlias = named.getAliasNode()?.getText() ?? 'ct';
+        break;
+      }
+    }
   }
 
-  return text;
+  if (!ctExists) return;
+
+  for (const node of source.getDescendantsOfKind(
+    ts.SyntaxKind.CallExpression,
+  )) {
+    if (node.getExpression().getText() === ctAlias) {
+      const path = node.getArguments()[0]?.getText().replace(/['"]/g, '');
+      const value = map.get(path);
+
+      node.replaceWithText(
+        isObject(value) ? JSON.stringify(value) : `'${value}'`,
+      );
+      ctReplaced = true;
+    }
+  }
+
+  return ctReplaced ? source.getText() : undefined;
 };

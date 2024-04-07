@@ -1,10 +1,5 @@
 import { codegen } from '../codegen';
-import { createContext } from '../context';
-
-const context = createContext({
-  foo: { 100: { value: '#fff' }, 200: { value: { base: '#000' } } },
-  bar: { 100: 'red', 200: 'blue' },
-});
+import { context } from './fixtures';
 
 describe('codegen', () => {
   it('generates ct runtime code', () => {
