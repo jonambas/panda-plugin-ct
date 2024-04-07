@@ -14,26 +14,25 @@ export const parser = (
     overwrite: true,
   });
 
-  let ctExists = false;
-  let ctReplaced = false;
-  let ctAlias = 'ct';
+  let exists = false;
+  let alias = 'ct';
 
   for (const node of source.getImportDeclarations()) {
     if (!node.getText().includes('ct')) continue;
     for (const named of node.getNamedImports()) {
       if (named.getText() === 'ct' || named.getText().startsWith('ct as')) {
-        ctExists = true;
-        ctAlias = named.getAliasNode()?.getText() ?? 'ct';
+        exists = true;
+        alias = named.getAliasNode()?.getText() ?? 'ct';
         break;
       }
     }
   }
 
-  if (!ctExists) return;
+  if (!exists) return;
 
   const calls = source
     .getDescendantsOfKind(ts.SyntaxKind.CallExpression)
-    .filter((node) => node.getExpression().getText() === ctAlias);
+    .filter((node) => node.getExpression().getText() === alias);
 
   for (const node of calls) {
     const path = node.getArguments()[0]?.getText().replace(/['"]/g, '');
@@ -42,9 +41,7 @@ export const parser = (
     node.replaceWithText(
       isObject(value) ? JSON.stringify(value) : `'${value}'`,
     );
-
-    ctReplaced = true;
   }
 
-  return ctReplaced ? source.getText() : undefined;
+  return calls.length ? source.getText() : undefined;
 };
