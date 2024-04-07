@@ -6,6 +6,7 @@ import type {
 } from '@pandacss/types';
 import { makePaths, mapTemplate } from './map';
 import type { PluginContext } from './types';
+import { serializeValue } from './utils';
 
 export const codegen = (
   args: CodegenPrepareHookArgs,
@@ -38,6 +39,11 @@ export const codegen = (
   cssFn.files.push(ctFile, ctDtsFile);
   indexFile.code += `\nexport * from './ct.mjs';`;
   indexDtsFile.code += `\nexport * from './ct';`;
+
+  if (context.debug) {
+    context.debug('plugin:ct', 'codegen complete');
+    context.debug('plugin:ct', map);
+  }
 
   return args.artifacts;
 };

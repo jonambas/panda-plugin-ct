@@ -1,6 +1,6 @@
 import type { ParserResultBeforeHookArgs } from '@pandacss/types';
 import type { PluginContext } from './types';
-import { isObject } from './utils';
+import { serializeValue } from './utils';
 import { ts } from 'ts-morph';
 
 export const parser = (
@@ -37,11 +37,13 @@ export const parser = (
   for (const node of calls) {
     const path = node.getArguments()[0]?.getText().replace(/['"]/g, '');
     const value = map.get(path);
-
-    node.replaceWithText(
-      isObject(value) ? JSON.stringify(value) : `'${value}'`,
-    );
+    node.replaceWithText(serializeValue(value));
   }
+
+  context.debug?.(
+    `plugin:ct`,
+    `Replaced ${calls.length} aliases in: ${args.filePath.split('/').at(-1)}`,
+  );
 
   return calls.length ? source.getText() : undefined;
 };

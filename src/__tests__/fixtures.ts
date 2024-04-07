@@ -5,4 +5,7 @@ export const tokens = {
   bar: { 100: 'red', 200: 'blue' },
 };
 
-export const context = createContext(tokens);
+const ctx = createContext(tokens);
+ctx.debug = vi.fn();
+
+export const context = ctx;

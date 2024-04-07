@@ -1,5 +1,5 @@
 import type { ComponentTokens } from './types';
-import { isObject, isObjectWithValue } from './utils';
+import { isObject, isObjectWithValue, serializeMap } from './utils';
 
 export const get = (tokens: ComponentTokens, path: string) => {
   const parts = path.split('.');
@@ -47,11 +47,6 @@ export const makeMap = (tokens: ComponentTokens) => {
   }
 
   return map;
-};
-
-// Serialize a Map to a JSON string.
-const serializeMap = (map: Map<any, any>) => {
-  return JSON.stringify(Array.from(map.entries()));
 };
 
 // Generate a template string for the token alias Map.
