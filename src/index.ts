@@ -13,6 +13,9 @@ const pluginComponentTokens = (tokens: ComponentTokens): PandaPlugin => {
   return {
     name: 'panda-plugin-ct',
     hooks: {
+      'context:created': (args) => {
+        context.debug = args.logger?.debug;
+      },
       'parser:before': (args) => {
         return parser(args, context);
       },
