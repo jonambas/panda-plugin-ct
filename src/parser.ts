@@ -21,7 +21,7 @@ export const parser = (
   for (const node of source.getImportDeclarations()) {
     if (!node.getText().includes('ct')) continue;
     for (const named of node.getNamedImports()) {
-      if (named.getText() === 'ct') {
+      if (named.getText() === 'ct' || named.getText().startsWith('ct as')) {
         ctExists = true;
         ctAlias = named.getAliasNode()?.getText() ?? 'ct';
         break;
@@ -31,18 +31,19 @@ export const parser = (
 
   if (!ctExists) return;
 
-  for (const node of source.getDescendantsOfKind(
-    ts.SyntaxKind.CallExpression,
-  )) {
-    if (node.getExpression().getText() === ctAlias) {
-      const path = node.getArguments()[0]?.getText().replace(/['"]/g, '');
-      const value = map.get(path);
+  const calls = source
+    .getDescendantsOfKind(ts.SyntaxKind.CallExpression)
+    .filter((node) => node.getExpression().getText() === ctAlias);
 
-      node.replaceWithText(
-        isObject(value) ? JSON.stringify(value) : `'${value}'`,
-      );
-      ctReplaced = true;
-    }
+  for (const node of calls) {
+    const path = node.getArguments()[0]?.getText().replace(/['"]/g, '');
+    const value = map.get(path);
+
+    node.replaceWithText(
+      isObject(value) ? JSON.stringify(value) : `'${value}'`,
+    );
+
+    ctReplaced = true;
   }
 
   return ctReplaced ? source.getText() : undefined;

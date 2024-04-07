@@ -58,13 +58,52 @@ describe('parser', () => {
     );
   });
 
-  it('skips without ct in contents', () => {
-    expect(
-      makeParser(`<div className={css({ bg: "red.200" })/>`),
-    ).toBeUndefined();
+  it('parses with an alias', () => {
+    const res = makeParser(`
+    import { css, ct as alias, cva } from '@/styled-system/css';
+    
+    const styles = cva({
+      base: {
+        // background: ct('foo.200'),
+        color: ct('bar.200'),
+      },
+    });
+    
+    export const Component = () => {
+      return (<div
+        className={
+          css({
+            bg: alias('foo.200'),
+            color: alias('bar.100')
+          })}
+      />);
+    `);
 
+    expect(res).toMatchInlineSnapshot(`
+      "import { css, ct as alias, cva } from '@/styled-system/css';
+          
+          const styles = cva({
+            base: {
+              // background: ct('foo.200'),
+              color: ct('bar.200'),
+            },
+          });
+          
+          export const Component = () => {
+            return (<div
+              className={
+                css({
+                  bg: {"base":"#000","lg":"#111"},
+                  color: 'red'
+                })}
+            />);
+          "
+    `);
+  });
+
+  it('skips without ct imports or expressions', () => {
     expect(
-      makeParser(`import { css } from '@/styled-system/css`),
+      makeParser(`<div className={css({ bg: ct("foo.200") })/>`),
     ).toBeUndefined();
 
     expect(
