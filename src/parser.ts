@@ -1,6 +1,7 @@
 import type { ParserResultBeforeHookArgs } from '@pandacss/types';
 import type { PluginContext } from './types';
 import { isObject } from './utils';
+import { ts } from 'ts-morph';
 
 export const parser = (
   args: ParserResultBeforeHookArgs,
@@ -8,29 +9,39 @@ export const parser = (
 ): string | void => {
   const { project, map } = context;
 
-  // TODO: handle `import { ct as xyz }` aliasing
-  const content = args.content;
-  if (!content.includes('ct(')) return;
-
-  const source = project.createSourceFile('__temp-ct-parser.ts', content, {
+  // Note: parser won't replace `ct` calls in JSX without .tsx
+  const source = project.createSourceFile('__ct-parser.tsx', args.content, {
     overwrite: true,
   });
 
-  let text = source.getText();
-  const calls = text.match(/ct\(['"][\w.]+['"]\)/g) ?? [];
+  let exists = false;
+  let alias = 'ct';
 
-  for (const call of calls) {
-    const path = call
-      .match(/['"][\w.]+['"]/)
-      ?.toString()
-      .replace(/['"]/g, '');
-    if (!path) continue;
+  for (const node of source.getImportDeclarations()) {
+    if (!node.getText().includes('ct')) continue;
+    for (const named of node.getNamedImports()) {
+      if (named.getText() === 'ct' || named.getText().startsWith('ct as')) {
+        exists = true;
+        alias = named.getAliasNode()?.getText() ?? 'ct';
+        break;
+      }
+    }
+  }
+
+  if (!exists) return;
+
+  const calls = source
+    .getDescendantsOfKind(ts.SyntaxKind.CallExpression)
+    .filter((node) => node.getExpression().getText() === alias);
+
+  for (const node of calls) {
+    const path = node.getArguments()[0]?.getText().replace(/['"]/g, '');
     const value = map.get(path);
-    text = text.replace(
-      call,
+
+    node.replaceWithText(
       isObject(value) ? JSON.stringify(value) : `'${value}'`,
     );
   }
 
-  return text;
+  return calls.length ? source.getText() : undefined;
 };

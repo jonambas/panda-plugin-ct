@@ -1,37 +1,113 @@
 import { parser } from '../parser';
-import { createContext } from '../context';
+import { context } from './fixtures';
 
-const context = createContext({
-  foo: { 100: { value: '#fff' }, 200: { value: { base: '#000' } } },
-  bar: { 100: 'red', 200: 'blue' },
-});
+export const makeParser = (content: string) => {
+  return parser(
+    {
+      configure: () => {},
+      filePath: 'test.tsx',
+      content,
+    },
+    context,
+  );
+};
 
 describe('parser', () => {
   it('parses', () => {
-    const res = parser(
-      {
-        configure: () => {},
-        filePath: 'test.tsx',
-        content: `<div className={css({ bg: ct("foo.200"), color: ct('bar.100'))})/>`,
+    const res = makeParser(`
+    import { css, ct, cva } from '@/styled-system/css';
+    
+    const styles = cva({
+      base: {
+        // background: ct('foo.200'),
+        color: ct('bar.200'),
       },
-      context,
-    );
+    });
+    
+    export const Component = () => {
+      return (<div
+        className={
+          css({
+            bg: ct('foo.200'),
+            color: ct('bar.100')
+          })}
+      />);
+    `);
 
     expect(res).toMatchInlineSnapshot(
-      `"<div className={css({ bg: {"base":"#000"}, color: 'red')})/>"`,
+      `
+      "import { css, ct, cva } from '@/styled-system/css';
+          
+          const styles = cva({
+            base: {
+              // background: ct('foo.200'),
+              color: 'blue',
+            },
+          });
+          
+          export const Component = () => {
+            return (<div
+              className={
+                css({
+                  bg: {"base":"#000","lg":"#111"},
+                  color: 'red'
+                })}
+            />);
+          "
+    `,
     );
   });
 
-  it('skips without "ct(" in contents', () => {
-    const res = parser(
-      {
-        configure: () => {},
-        filePath: 'test.tsx',
-        content: `<div className={css({ bg: "red.200" })/>`,
+  it('parses with an alias', () => {
+    const res = makeParser(`
+    import { css, ct as alias, cva } from '@/styled-system/css';
+    
+    const styles = cva({
+      base: {
+        // background: ct('foo.200'),
+        color: ct('bar.200'),
       },
-      context,
-    );
+    });
+    
+    export const Component = () => {
+      return (<div
+        className={
+          css({
+            bg: alias('foo.200'),
+            color: alias('bar.100')
+          })}
+      />);
+    `);
 
-    expect(res).toBeUndefined();
+    expect(res).toMatchInlineSnapshot(`
+      "import { css, ct as alias, cva } from '@/styled-system/css';
+          
+          const styles = cva({
+            base: {
+              // background: ct('foo.200'),
+              color: ct('bar.200'),
+            },
+          });
+          
+          export const Component = () => {
+            return (<div
+              className={
+                css({
+                  bg: {"base":"#000","lg":"#111"},
+                  color: 'red'
+                })}
+            />);
+          "
+    `);
+  });
+
+  it('skips without ct imports or expressions', () => {
+    expect(
+      makeParser(`<div className={css({ bg: ct("foo.200") })/>`),
+    ).toBeUndefined();
+
+    expect(
+      makeParser(`import { ct } from '@/styled-system/css`),
+    ).toBeUndefined();
   });
 });

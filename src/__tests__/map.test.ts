@@ -1,9 +1,5 @@
 import { get, makeMap, makePaths, mapTemplate } from '../map';
-
-const tokens = {
-  foo: { 100: { value: '#fff' }, 200: { value: { base: '#000' } } },
-  bar: { 100: 'red', 200: 'blue' },
-};
+import { tokens } from './fixtures';
 
 describe('get', () => {
   it('gets a string', () => {
@@ -15,6 +11,7 @@ describe('get', () => {
       `
       {
         "base": "#000",
+        "lg": "#111",
       }
     `,
     );
@@ -67,6 +64,7 @@ describe('makeMap', () => {
         "foo.100" => "#fff",
         "foo.200" => {
           "base": "#000",
+          "lg": "#111",
         },
         "bar.100" => "red",
         "bar.200" => "blue",
