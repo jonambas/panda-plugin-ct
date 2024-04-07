@@ -13,3 +13,12 @@ export const serializeMap = (map: Map<any, any>) => {
 export const serializeValue = (value: any) => {
   return isObject(value) ? JSON.stringify(value) : `'${value}'`;
 };
+
+export const serializeMapTypes = (map: Map<any, any>) => {
+  let code = 'const pluginCtMap = {';
+  for (const [key, value] of map.entries()) {
+    code += `\n  '${key}': ${serializeValue(value)},`;
+  }
+  code += '\n} as const;';
+  return code;
+};
