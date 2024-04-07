@@ -32,7 +32,7 @@ export const codegen = (
   const ctDtsFile: ArtifactContent = {
     file: 'ct.d.ts',
     code: `${serializeMapTypes(map)}
-    \nexport const ct: <T extends keyof typeof pluginCtMap>(alias: T) => typeof pluginCtMap[T];`,
+    \nexport const ct: <T extends keyof PluginCtMapType>(alias: T) => PluginCtMapType[T];`,
   };
 
   cssFn.files.push(ctFile, ctDtsFile);
