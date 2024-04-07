@@ -6,6 +6,6 @@ export const tokens = {
 };
 
 const ctx = createContext(tokens);
-ctx.debug = console.log;
+ctx.debug = vi.fn();
 
 export const context = ctx;
