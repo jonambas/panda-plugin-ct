@@ -2,6 +2,7 @@ import type {
   CodegenPrepareHookArgs,
   MaybeAsyncReturn,
   Artifact,
+  ArtifactContent,
 } from '@pandacss/types';
 import { makePaths, mapTemplate } from './map';
 import type { PluginContext } from './types';
@@ -11,28 +12,32 @@ export const codegen = (
   context: PluginContext,
 ): MaybeAsyncReturn<void | Artifact[]> => {
   const { tokens, map } = context;
-
   const cssFn = args.artifacts.find((a) => a.id === 'css-fn');
-  if (!cssFn) return args.artifacts;
+  const index = args.artifacts.find((a) => a.id === 'css-index');
+  const indexFile = index?.files.find((f) => f.file.includes('index.mjs'));
+  const indexDtsFile = index?.files.find((f) => f.file.includes('index.d.ts'));
 
-  const cssFile = cssFn.files.find((f) => f.file.includes('css.mjs'));
-  if (!cssFile) return args.artifacts;
+  if (!cssFn || !indexFile || !indexDtsFile) return args.artifacts;
 
-  cssFile.code += '\n\n/* panda-plugin-ct codegen */';
-  cssFile.code += mapTemplate(map);
-  cssFile.code += `
+  const code = `${mapTemplate(map)}
   export const ct = (path) => {
     if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
     return pluginCtMap.get(path);
   };`;
 
-  const cssDtsFile = cssFn.files.find((f) => f.file.includes('css.d.'));
-  if (!cssDtsFile) return args.artifacts;
-
   const paths = makePaths(tokens)
     .map((key) => `"${key}"`)
     .join(' | ');
-  cssDtsFile.code += `\nexport const ct: (alias: ${paths}) => string;`;
+
+  const ctFile: ArtifactContent = { file: 'ct.mjs', code };
+  const ctDtsFile: ArtifactContent = {
+    file: 'ct.d.ts',
+    code: `export const ct: (alias: ${paths}) => string;`,
+  };
+
+  cssFn.files.push(ctFile, ctDtsFile);
+  indexFile.code += `\nexport * from './ct.mjs';`;
+  indexDtsFile.code += `\nexport * from './ct';`;
 
   return args.artifacts;
 };
