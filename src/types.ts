@@ -1,4 +1,4 @@
-import { LoggerInterface, LogLevel } from '@pandacss/types';
+import type { LoggerInterface } from '@pandacss/types';
 import { type Project } from 'ts-morph';
 
 export type ComponentTokens = { [k: string]: string | ComponentTokens };

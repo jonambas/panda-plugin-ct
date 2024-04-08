@@ -21,5 +21,4 @@ export const createContext = (tokens: ComponentTokens): PluginContext => ({
   }),
   tokens,
   map: makeMap(tokens),
-  debug: undefined,
 });

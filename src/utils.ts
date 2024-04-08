@@ -15,10 +15,9 @@ export const serializeValue = (value: any) => {
 };
 
 export const serializeMapTypes = (map: Map<any, any>) => {
-  let code = 'type PluginCtMapType = {';
+  let code = '';
   for (const [key, value] of map.entries()) {
-    code += `\n  '${key}': ${serializeValue(value)},`;
+    code += `\n  '${key}': ${serializeValue(value)};`;
   }
-  code += '\n}';
   return code;
 };
