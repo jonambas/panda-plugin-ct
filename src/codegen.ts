@@ -16,9 +16,7 @@ export const codegen = (
 
   const cssFn = args.artifacts.find((a) => a.id === 'css-fn');
   const index = args.artifacts.find((a) => a.id === 'css-index');
-  const indexFile = index?.files.find(
-    (f) => f.file.includes('index.mjs') || f.file.includes('index.js'),
-  );
+  const indexFile = index?.files.find((f) => f.file.match(/^index\.(mjs|js)/));
   const indexDtsFile = index?.files.find((f) => f.file.includes('index.d.'));
   const ext = indexFile?.file.split('.').at(-1);
   const dtsExt = indexDtsFile?.file.split('.').at(-1);
