@@ -8,4 +8,12 @@ export type PluginContext = {
   tokens: ComponentTokens;
   map: Map<string, string | object>;
   debug?: LoggerInterface['debug'];
+  options: PluginOptions;
+};
+
+export type PluginOptions = {
+  /**
+   * Disables the aliases if `false`. Token paths will be used as is by Panda.
+   */
+  enable?: boolean;
 };

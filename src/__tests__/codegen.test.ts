@@ -1,5 +1,5 @@
 import { codegen } from '../codegen';
-import { context } from './fixtures';
+import { context, disabledContext } from './fixtures';
 
 describe('codegen', () => {
   it('generates ct runtime code', () => {
@@ -30,10 +30,10 @@ describe('codegen', () => {
               "code": "
       const pluginCtMap = new Map([["foo.100","#fff"],["foo.200",{"base":"#000","lg":"#111"}],["bar.100","red"],["bar.200","blue"]]);
 
-        export const ct = (path) => {
-          if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
-          return pluginCtMap.get(path);
-        };",
+            export const ct = (path) => {
+              if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
+              return pluginCtMap.get(path);
+            };",
               "file": "ct.mjs",
             },
             {
@@ -119,6 +119,32 @@ describe('codegen', () => {
     expect(result.at(0).files[1].file).toEqual('ct.d.mts');
     expect(result.at(1).files[0].code).includes('./ct.mjs');
     expect(result.at(1).files[1].code).includes('./ct');
+  });
+
+  it('generates ct runtime code with enable set to false', () => {
+    const result = codegen(
+      {
+        artifacts: [
+          {
+            id: 'css-fn',
+            files: [],
+          },
+          {
+            id: 'css-index',
+            files: [
+              { file: 'index.mjs', code: '// ...panda code' },
+              { file: 'index.d.ts', code: '// ...panda code' },
+            ],
+          },
+        ],
+        changed: [],
+      },
+      disabledContext,
+    ) as any[];
+
+    expect(result[0].files[0].code).toMatchInlineSnapshot(
+      `"export const ct = (path) => path;"`,
+    );
   });
 
   it('skips if artifacts dont exist', () => {

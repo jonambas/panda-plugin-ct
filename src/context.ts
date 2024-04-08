@@ -1,8 +1,11 @@
 import { Project, ts } from 'ts-morph';
-import type { ComponentTokens, PluginContext } from './types';
+import type { ComponentTokens, PluginContext, PluginOptions } from './types';
 import { makeMap } from './map';
 
-export const createContext = (tokens: ComponentTokens): PluginContext => ({
+export const createContext = (
+  tokens: ComponentTokens,
+  options?: PluginOptions,
+): PluginContext => ({
   project: new Project({
     compilerOptions: {
       jsx: ts.JsxEmit.React,
@@ -21,4 +24,8 @@ export const createContext = (tokens: ComponentTokens): PluginContext => ({
   }),
   tokens,
   map: makeMap(tokens),
+  options: {
+    enable: true,
+    ...options,
+  },
 });

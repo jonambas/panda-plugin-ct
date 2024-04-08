@@ -9,3 +9,4 @@ const ctx = createContext(tokens);
 ctx.debug = vi.fn();
 
 export const context = ctx;
+export const disabledContext = { ...ctx, options: { enable: false } };

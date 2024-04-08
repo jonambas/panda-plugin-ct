@@ -7,7 +7,7 @@ export const parser = (
   args: ParserResultBeforeHookArgs,
   context: PluginContext,
 ): string | void => {
-  const { project, map } = context;
+  const { project, map, options } = context;
 
   // Note: parser won't replace `ct` calls in JSX without .tsx
   const source = project.createSourceFile('__ct-parser.tsx', args.content, {
@@ -37,7 +37,7 @@ export const parser = (
   for (const node of calls) {
     const path = node.getArguments()[0]?.getText().replace(/['"]/g, '');
     const value = map.get(path);
-    node.replaceWithText(serializeValue(value));
+    node.replaceWithText(serializeValue(options.enable ? value : path));
   }
 
   context.debug?.(

@@ -12,7 +12,7 @@ export const codegen = (
   args: CodegenPrepareHookArgs,
   context: PluginContext,
 ): MaybeAsyncReturn<void | Artifact[]> => {
-  const { map } = context;
+  const { map, options } = context;
 
   const cssFn = args.artifacts.find((a) => a.id === 'css-fn');
   const index = args.artifacts.find((a) => a.id === 'css-index');
@@ -23,13 +23,17 @@ export const codegen = (
 
   if (!cssFn || !indexFile || !indexDtsFile) return args.artifacts;
 
+  const ctCode = options.enable
+    ? `${mapTemplate(map)}
+      export const ct = (path) => {
+        if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
+        return pluginCtMap.get(path);
+      };`
+    : `export const ct = (path) => path;`;
+
   const ctFile: ArtifactContent = {
     file: `ct.${ext}`,
-    code: `${mapTemplate(map)}
-  export const ct = (path) => {
-    if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
-    return pluginCtMap.get(path);
-  };`,
+    code: ctCode,
   };
 
   const ctDtsFile: ArtifactContent = {

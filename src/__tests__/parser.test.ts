@@ -1,14 +1,15 @@
 import { parser } from '../parser';
-import { context } from './fixtures';
+import type { PluginContext } from '../types';
+import { context, disabledContext } from './fixtures';
 
-export const makeParser = (content: string) => {
+export const makeParser = (content: string, ctx: PluginContext = context) => {
   return parser(
     {
       configure: () => {},
       filePath: 'test.tsx',
       content,
     },
-    context,
+    ctx,
   );
 };
 
@@ -34,8 +35,7 @@ describe('parser', () => {
       />);
     `);
 
-    expect(res).toMatchInlineSnapshot(
-      `
+    expect(res).toMatchInlineSnapshot(`
       "import { css, ct, cva } from '@/styled-system/css';
           
           const styles = cva({
@@ -54,8 +54,7 @@ describe('parser', () => {
                 })}
             />);
           "
-    `,
-    );
+    `);
   });
 
   it('parses with an alias', () => {
@@ -98,6 +97,56 @@ describe('parser', () => {
                 })}
             />);
           "
+    `);
+  });
+
+  it('passes through paths when enable is set to false', () => {
+    const res = parser(
+      {
+        configure: vi.fn(),
+        filePath: 'test.tsx',
+        content: `
+      import { css, ct, cva } from '@/styled-system/css';
+      
+      const styles = cva({
+        base: {
+          // background: ct('foo.200'),
+          color: ct('bar.200'),
+        },
+      });
+      
+      export const Component = () => {
+        return (<div
+          className={
+            css({
+              bg: ct('foo.200'),
+              color: ct('bar.100')
+            })}
+        />);
+      `,
+      },
+      disabledContext,
+    );
+
+    expect(res).toMatchInlineSnapshot(`
+      "import { css, ct, cva } from '@/styled-system/css';
+            
+            const styles = cva({
+              base: {
+                // background: ct('foo.200'),
+                color: 'bar.200',
+              },
+            });
+            
+            export const Component = () => {
+              return (<div
+                className={
+                  css({
+                    bg: 'foo.200',
+                    color: 'bar.100'
+                  })}
+              />);
+            "
     `);
   });
 

@@ -2,14 +2,17 @@ import type { PandaPlugin } from '@pandacss/types';
 import { parser } from './parser';
 import { codegen } from './codegen';
 import { createContext } from './context';
-import type { ComponentTokens } from './types';
+import type { ComponentTokens, PluginOptions } from './types';
 import { makeMap } from './map';
 
 /**
  * @see https://github.com/jonambas/panda-plugin-ct
  */
-const pluginComponentTokens = (tokens: ComponentTokens): PandaPlugin => {
-  const context = createContext(tokens);
+const pluginComponentTokens = (
+  tokens: ComponentTokens,
+  options?: PluginOptions,
+): PandaPlugin => {
+  const context = createContext(tokens, options);
   return {
     name: 'panda-plugin-ct',
     hooks: {
@@ -27,4 +30,4 @@ const pluginComponentTokens = (tokens: ComponentTokens): PandaPlugin => {
   };
 };
 
-export { pluginComponentTokens, ComponentTokens };
+export { pluginComponentTokens, ComponentTokens, PluginOptions };
