@@ -15,6 +15,7 @@ const pluginComponentTokens = (tokens: ComponentTokens): PandaPlugin => {
     hooks: {
       'context:created': (args) => {
         context.debug = args.logger?.debug;
+        context.config = args.ctx.config;
       },
       'parser:before': (args) => {
         return parser(args, context);

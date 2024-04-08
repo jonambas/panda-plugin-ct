@@ -1,4 +1,4 @@
-import { LoggerInterface, LogLevel } from '@pandacss/types';
+import { Config, LoggerInterface, LogLevel } from '@pandacss/types';
 import { type Project } from 'ts-morph';
 
 export type ComponentTokens = { [k: string]: string | ComponentTokens };
@@ -8,4 +8,5 @@ export type PluginContext = {
   tokens: ComponentTokens;
   map: Map<string, string | object>;
   debug?: LoggerInterface['debug'];
+  config?: Config;
 };

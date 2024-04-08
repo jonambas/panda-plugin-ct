@@ -4,24 +4,33 @@ import type {
   Artifact,
   ArtifactContent,
 } from '@pandacss/types';
-import { makePaths, mapTemplate } from './map';
+import { mapTemplate } from './map';
 import type { PluginContext } from './types';
-import { serializeMapTypes, serializeValue } from './utils';
+import { serializeMapTypes } from './utils';
 
 export const codegen = (
   args: CodegenPrepareHookArgs,
   context: PluginContext,
 ): MaybeAsyncReturn<void | Artifact[]> => {
-  const { tokens, map } = context;
+  const { config, map } = context;
+
+  // @see https://panda-css.com/docs/references/config#forceconsistenttypeextension
+  const ext = config?.outExtension ?? 'mjs';
+  const dtsExt = !config?.forceConsistentTypeExtension
+    ? 'ts'
+    : ext === 'js'
+      ? 'ts'
+      : 'mts';
+
   const cssFn = args.artifacts.find((a) => a.id === 'css-fn');
   const index = args.artifacts.find((a) => a.id === 'css-index');
-  const indexFile = index?.files.find((f) => f.file.includes('index.mjs'));
-  const indexDtsFile = index?.files.find((f) => f.file.includes('index.d.ts'));
+  const indexFile = index?.files.find((f) => f.file.includes(`index.${ext}`));
+  const indexDtsFile = index?.files.find((f) => f.file.includes('index.d.'));
 
   if (!cssFn || !indexFile || !indexDtsFile) return args.artifacts;
 
   const ctFile: ArtifactContent = {
-    file: 'ct.mjs',
+    file: `ct.${ext}`,
     code: `${mapTemplate(map)}
   export const ct = (path) => {
     if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
@@ -30,13 +39,13 @@ export const codegen = (
   };
 
   const ctDtsFile: ArtifactContent = {
-    file: 'ct.d.ts',
-    code: `${serializeMapTypes(map)}
-    \nexport const ct: <T extends keyof PluginCtMapType>(alias: T) => PluginCtMapType[T];`,
+    file: `ct.d.${dtsExt}`,
+    code: `type PluginCtMapType = {${serializeMapTypes(map)}};
+    export const ct: <T extends keyof PluginCtMapType>(alias: T) => PluginCtMapType[T];`,
   };
 
   cssFn.files.push(ctFile, ctDtsFile);
-  indexFile.code += `\nexport * from './ct.mjs';`;
+  indexFile.code += `\nexport * from './ct.${ext}';`;
   indexDtsFile.code += `\nexport * from './ct';`;
 
   if (context.debug) {
