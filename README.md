@@ -40,7 +40,7 @@ Which will produce:
 <!-- With ct -->
 <div class="d_flex bg_red.500" />
 
-<!-- With component-level tokens in semanticToken -->
+<!-- With Panda's semanticTokens -->
 <div class="d_flex bg_alert.background" />
 ```
 
@@ -48,7 +48,7 @@ Which will produce:
 /* With ct */
 --colors-red-500: #ef4444;
 
-/* With component-level tokens in semanticToken */
+/* With Panda's semanticTokens */
 --colors-alert-background: var(--colors-red-500);
 
 .d_flex {
@@ -60,7 +60,7 @@ Which will produce:
   background: var(--colors-red-500);
 }
 
-/* With component-level tokens in semanticToken */
+/* With Panda's semanticTokens */
 .bg_alert\.background {
   background: var(--colors-alert-background);
 }
@@ -70,7 +70,7 @@ Which will produce:
 
 ### Supported Syntax
 
-This plugin supports aliasing to Panda's object syntax via a `value` key, just as you would define styles with conditions in Panda's theme.
+This plugin supports aliasing to Panda's object syntax via a `value` key, just as you would define semantic tokens in Panda's theme.
 
 ```ts
 export default defineConfig({

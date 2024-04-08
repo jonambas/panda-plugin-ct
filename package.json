@@ -1,7 +1,17 @@
 {
   "name": "panda-plugin-ct",
   "version": "0.0.7",
-  "description": "",
+  "description": "A Panda CSS plugin for alias design tokens",
+  "author": "Jon Ambas <jon@jonambas.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonambas/panda-plugin-ct.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jonambas/panda-plugin-ct/issues"
+  },
+  "homepage": "https://github.com/jonambas/panda-plugin-ct",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -29,8 +39,6 @@
     "test": "vitest",
     "test:ci": "vitest run --coverage --reporter=basic"
   },
-  "author": "Jon Ambas <jon@jonambas.com>",
-  "license": "MIT",
   "dependencies": {
     "ts-morph": "22.0.0"
   },
