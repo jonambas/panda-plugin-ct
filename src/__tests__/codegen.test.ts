@@ -30,10 +30,10 @@ describe('codegen', () => {
               "code": "
       const pluginCtMap = new Map([["foo.100","#fff"],["foo.200",{"base":"#000","lg":"#111"}],["bar.100","red"],["bar.200","blue"]]);
 
-        export const ct = (path) => {
-          if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
-          return pluginCtMap.get(path);
-        };",
+          export const ct = (path) => {
+            if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
+            return pluginCtMap.get(path);
+          };",
               "file": "ct.mjs",
             },
             {

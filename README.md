@@ -68,9 +68,9 @@ Which will produce:
 
 ---
 
-### Supported Syntax
+### Supported syntax
 
-This plugin supports aliasing to Panda's object syntax via a `value` key, just as you would define semantic tokens in Panda's theme.
+This plugin supports aliasing to Panda's object syntax via a `value` key, just as you would define semantic tokens in Panda's theme. Anything Panda supports will work, including raw values.
 
 ```ts
 export default defineConfig({
@@ -84,7 +84,7 @@ export default defineConfig({
           },
         },
         text: {
-          value: 'gray.100',
+          value: '#111',
         },
       },
     }),
@@ -102,14 +102,45 @@ export default defineConfig({
 Produces:
 
 ```html
-<div class="bg_red.500 lg:bg_blue.500 text_gray.100" />
+<div class="bg_red.500 lg:bg_blue.500 text_#111" />
 ```
 
 ---
 
-### Alternatives
+### Further optimization
 
-There are alternatives to achieve the same result.
+This plugin generates a performant JS runtime to map paths to their respective class names. This runtime can be completely removed using [@pandabox/unplugin](https://github.com/astahmer/pandabox/tree/main/packages/unplugin), with a transformer exported from this package. Your bundler's config will need to be modified to achieve this.
 
-- Use Panda's `importMap` in config to reference your own alias to token mapping.
-- Use `@pandabox/unplugin` to strip out and remove your own alias mapping at build time.
+Example Next.js config:
+
+```js
+import unplugin from '@pandabox/unplugin';
+import { transform } from 'panda-plugin-ct';
+
+// Your token object
+// This should be the same as the object you supplied to the Panda plugin
+const tokens = {};
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  webpack: (config) => {
+    config.plugins.push(
+      unplugin.webpack({
+        transform: transform(tokens),
+        optimizeJs: true, // Optional, this will replace other Panda runtime functions (css, cva, etc)
+      }),
+    );
+    return config;
+  },
+};
+
+export default nextConfig;
+```
+
+---
+
+### Acknowledgement
+
+- [Jimmy](https://github.com/jimmymorris) – for the idea and motivation behind the plugin
+- [Alex](https://github.com/astahmer) – for providing feedback with the plugin's internals and functionality

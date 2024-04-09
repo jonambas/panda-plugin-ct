@@ -26,10 +26,10 @@ export const codegen = (
   const ctFile: ArtifactContent = {
     file: `ct.${ext}`,
     code: `${mapTemplate(map)}
-  export const ct = (path) => {
-    if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
-    return pluginCtMap.get(path);
-  };`,
+    export const ct = (path) => {
+      if (!pluginCtMap.has(path)) return 'panda-plugin-ct_alias-not-found';
+      return pluginCtMap.get(path);
+    };`,
   };
 
   const ctDtsFile: ArtifactContent = {

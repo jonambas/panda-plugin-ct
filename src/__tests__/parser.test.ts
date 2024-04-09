@@ -15,6 +15,7 @@ export const makeParser = (content: string) => {
 describe('parser', () => {
   it('parses', () => {
     const res = makeParser(`
+    import foo from 'bar';
     import { css, ct, cva } from '@/styled-system/css';
     
     const styles = cva({
@@ -36,7 +37,8 @@ describe('parser', () => {
 
     expect(res).toMatchInlineSnapshot(
       `
-      "import { css, ct, cva } from '@/styled-system/css';
+      "import foo from 'bar';
+          import { css, ct, cva } from '@/styled-system/css';
           
           const styles = cva({
             base: {
