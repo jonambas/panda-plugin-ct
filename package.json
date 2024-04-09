@@ -1,6 +1,6 @@
 {
   "name": "panda-plugin-ct",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "A Panda CSS plugin for alias design tokens",
   "author": "Jon Ambas <jon@jonambas.com>",
   "license": "MIT",
