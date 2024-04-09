@@ -4,6 +4,7 @@ import { codegen } from './codegen';
 import { createContext } from './context';
 import type { ComponentTokens } from './types';
 import { makeMap } from './map';
+import { transformer } from './transformer';
 
 /**
  * @see https://github.com/jonambas/panda-plugin-ct
@@ -27,4 +28,4 @@ const pluginComponentTokens = (tokens: ComponentTokens): PandaPlugin => {
   };
 };
 
-export { pluginComponentTokens, ComponentTokens };
+export { pluginComponentTokens, transformer, type ComponentTokens };
