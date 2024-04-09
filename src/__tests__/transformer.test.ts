@@ -1,15 +1,14 @@
-import { transformer } from '../transformer';
-import type { PluginContext } from '../types';
-import { context, tokens } from './fixtures';
+import { transform } from '../transform';
+import { tokens } from './fixtures';
 
-describe('transformer', () => {
+describe('transform', () => {
   it('returns a function', () => {
-    expect(transformer(tokens)).toBeTypeOf('function');
+    expect(transform(tokens)).toBeTypeOf('function');
   });
 
   it('replaces ct', () => {
     expect(
-      transformer(tokens)({
+      transform(tokens)({
         configure: () => {},
         filePath: 'test.tsx',
         content: `
@@ -56,7 +55,7 @@ describe('transformer', () => {
 
   it('skips without imports, expressions, content', () => {
     expect(
-      transformer(tokens)({
+      transform(tokens)({
         configure: () => {},
         filePath: 'test.tsx',
         content: `<div className={css({ bg: ct("foo.200") })/>`,
@@ -64,7 +63,7 @@ describe('transformer', () => {
     ).toBeUndefined();
 
     expect(
-      transformer(tokens)({
+      transform(tokens)({
         configure: () => {},
         filePath: 'test.tsx',
         content: `import { ct } from '@/styled-system/css`,
@@ -72,7 +71,7 @@ describe('transformer', () => {
     ).toBeUndefined();
 
     expect(
-      transformer(tokens)({
+      transform(tokens)({
         configure: () => {},
         filePath: 'test.tsx',
         content: ``,

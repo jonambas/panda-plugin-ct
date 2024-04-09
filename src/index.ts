@@ -4,9 +4,11 @@ import { codegen } from './codegen';
 import { createContext } from './context';
 import type { ComponentTokens } from './types';
 import { makeMap } from './map';
-import { transformer } from './transformer';
+import { transform } from './transform';
 
 /**
+ * 🐼 A Panda CSS plugin for design token aliases
+ *
  * @see https://github.com/jonambas/panda-plugin-ct
  */
 const pluginComponentTokens = (tokens: ComponentTokens): PandaPlugin => {
@@ -28,4 +30,4 @@ const pluginComponentTokens = (tokens: ComponentTokens): PandaPlugin => {
   };
 };
 
-export { pluginComponentTokens, transformer, type ComponentTokens };
+export { pluginComponentTokens, transform, type ComponentTokens };

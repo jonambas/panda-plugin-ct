@@ -10,7 +10,7 @@ import { parser } from './parser';
  * @see https://github.com/jonambas/panda-plugin-ct
  * @see https://github.com/astahmer/pandabox/tree/main/packages/unplugin
  */
-export const transformer = (tokens: ComponentTokens) => {
+export const transform = (tokens: ComponentTokens) => {
   const context = createContext(tokens);
   return (args: ParserResultBeforeHookArgs) => {
     // This doesn't have `args.configure`
