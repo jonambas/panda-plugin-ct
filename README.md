@@ -128,7 +128,6 @@ const nextConfig = {
     config.plugins.push(
       unplugin.webpack({
         transform: transform(tokens),
-        optimizeJs: true, // Optional, this will replace other Panda runtime functions (css, cva, etc)
       }),
     );
     return config;
