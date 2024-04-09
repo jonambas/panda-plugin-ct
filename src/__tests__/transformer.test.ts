@@ -9,7 +9,6 @@ describe('transform', () => {
   it('replaces ct', () => {
     expect(
       transform(tokens)({
-        configure: () => {},
         filePath: 'test.tsx',
         content: `
       import { css, ct, cva } from '@/styled-system/css';
@@ -56,7 +55,6 @@ describe('transform', () => {
   it('skips without imports, expressions, content', () => {
     expect(
       transform(tokens)({
-        configure: () => {},
         filePath: 'test.tsx',
         content: `<div className={css({ bg: ct("foo.200") })/>`,
       }),
@@ -64,7 +62,6 @@ describe('transform', () => {
 
     expect(
       transform(tokens)({
-        configure: () => {},
         filePath: 'test.tsx',
         content: `import { ct } from '@/styled-system/css`,
       }),
@@ -72,7 +69,6 @@ describe('transform', () => {
 
     expect(
       transform(tokens)({
-        configure: () => {},
         filePath: 'test.tsx',
         content: ``,
       }),

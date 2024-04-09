@@ -3,6 +3,11 @@ import { createContext } from './context';
 import type { ComponentTokens } from './types';
 import { parser } from './parser';
 
+// TODO: This is what unplugin expects, but avoiding installing @pandacss/node bc of a type conflict
+// Omit<ParserResultBeforeHookArgs, 'configure'> & Pick<SourceFileHookArgs, 'context'>
+
+type TransformArgs = Omit<ParserResultBeforeHookArgs, 'configure'>;
+
 /**
  * Transformer for @pandabox/unplugin.
  * Replaces JS runtime calls to `ct` with their resulting class names.
@@ -12,10 +17,10 @@ import { parser } from './parser';
  */
 export const transform = (tokens: ComponentTokens) => {
   const context = createContext(tokens);
-  return (args: ParserResultBeforeHookArgs) => {
+  return (args: TransformArgs) => {
     // This doesn't have `args.configure`
 
     if (!args.content) return;
-    return parser(args, context);
+    return parser(args as ParserResultBeforeHookArgs, context);
   };
 };
