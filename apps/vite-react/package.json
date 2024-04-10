@@ -16,7 +16,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@pandabox/unplugin": "^0.1.3",
+    "@pandabox/unplugin": "0.1.3",
     "@pandacss/dev": "0.37.2",
     "@types/react": "18.2.75",
     "@types/react-dom": "18.2.24",
