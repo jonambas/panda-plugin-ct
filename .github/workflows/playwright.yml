@@ -25,6 +25,9 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Build plugin
+        run: npm run build
+
       - name: Prepare Vite app
         run: npm run vite:prepare
 
