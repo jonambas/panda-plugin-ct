@@ -37,13 +37,19 @@
     "build": "tsup",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest",
-    "test:ci": "vitest run --coverage --reporter=basic"
+    "test:ci": "vitest run --coverage --reporter=basic",
+    "vite:prepare": "cd apps/vite-react && npm ci",
+    "vite:start": "cd apps/vite-react && npm run build && npm run preview",
+    "e2e": "playwright test --ui",
+    "base": "bun ./apps/fixtures/make.ts gen -s base"
   },
   "dependencies": {
     "ts-morph": "22.0.0"
   },
   "devDependencies": {
     "@pandacss/types": "0.37.2",
+    "@playwright/test": "1.43.0",
+    "@types/node": "20.12.7",
     "@vitest/coverage-v8": "1.4.0",
     "prettier": "3.2.5",
     "tsup": "8.0.2",
