@@ -1,4 +1,20 @@
-/node_modules
-/dist
-/apps
+node_modules
+dist
+
 /coverage
+
+## Panda
+styled-system
+styled-system-studio
+
+# WIP stuff
+/apps/fixtures/make.ts
+/apps/fixtures/scenarios.ts
+/apps/next-pages
+/apps/next-app
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
