@@ -34,8 +34,8 @@ export const codegen = (
 
   const ctDtsFile: ArtifactContent = {
     file: `ct.d.${dtsExt}`,
-    code: `type PluginCtMapType = {${serializeMapTypes(map)}};
-    export const ct: <T extends keyof PluginCtMapType>(alias: T) => PluginCtMapType[T];`,
+    code: `/* eslint-disable */\ntype PluginCtMapType = {${serializeMapTypes(map)}};
+    export declare const ct: <T extends keyof PluginCtMapType>(alias: T) => PluginCtMapType[T];`,
   };
 
   cssFn.files.push(ctFile, ctDtsFile);

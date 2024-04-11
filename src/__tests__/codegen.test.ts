@@ -37,12 +37,13 @@ describe('codegen', () => {
               "file": "ct.mjs",
             },
             {
-              "code": "type PluginCtMapType = {
+              "code": "/* eslint-disable */
+      type PluginCtMapType = {
         'foo.100': '#fff';
         'foo.200': {"base":"#000","lg":"#111"};
         'bar.100': 'red';
         'bar.200': 'blue';};
-          export const ct: <T extends keyof PluginCtMapType>(alias: T) => PluginCtMapType[T];",
+          export declare const ct: <T extends keyof PluginCtMapType>(alias: T) => PluginCtMapType[T];",
               "file": "ct.d.ts",
             },
           ],
