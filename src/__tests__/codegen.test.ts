@@ -37,7 +37,8 @@ describe('codegen', () => {
               "file": "ct.mjs",
             },
             {
-              "code": "type PluginCtMapType = {
+              "code": "/* eslint-disable */
+      type PluginCtMapType = {
         'foo.100': '#fff';
         'foo.200': {"base":"#000","lg":"#111"};
         'bar.100': 'red';
