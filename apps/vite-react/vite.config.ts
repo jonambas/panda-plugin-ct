@@ -5,14 +5,16 @@ import unplugin from '@pandabox/unplugin';
 import { transform } from 'panda-plugin-ct';
 import { componentTokens } from '../fixtures/tokens';
 
-const plugins =
-  process.env.NODE_ENV === 'production'
-    ? [
-        unplugin.vite({
-          transform: transform(componentTokens),
-        }),
-      ]
-    : [];
+// TODO, split testing for this macro
+// const plugins =
+//   process.env.NODE_ENV === 'production'
+//     ? [
+//         unplugin.vite({
+//           transform: transform(componentTokens),
+//           optimizeJs: false,
+//         }),
+//       ]
+//     : [];
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -24,5 +26,8 @@ export default defineConfig({
   preview: {
     port: 3000,
   },
-  plugins: [react(), ...plugins],
+  plugins: [
+    react(),
+    //...plugins
+  ],
 });
