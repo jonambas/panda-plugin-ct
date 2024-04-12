@@ -1,6 +1,6 @@
 # panda-plugin-ct
 
-Allows aliases to tokens without generating alias-level class names.
+A [Panda CSS](https://panda-css.com/) plugin to create aliases to tokens without generating alias-level class names.
 
 The plugin allows you to structure your tokens in a way makes sense to you, and does not need to adhere to Panda's token structure.
 
