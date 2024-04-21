@@ -4,6 +4,14 @@ A [Panda CSS](https://panda-css.com/) plugin to create aliases to tokens without
 
 The plugin allows you to structure your tokens in a way makes sense to you, and does not need to adhere to Panda's token structure.
 
+---
+
+### Installation
+
+```sh
+npm i panda-plugin-ct
+```
+
 ```ts
 // panda.config.ts
 
@@ -22,6 +30,14 @@ export default defineConfig({
 });
 ```
 
+---
+
+### Usage
+
+This plugin provides a fully-typed `ct` function to reference the aliases specified in your `panda.config.ts` file. These aliases exist outside of Panda's context and are replaced with the values you provide the plugin. These values can be anything that Panda works with, such as tokens, semantic tokens, objects with conditions, or raw values.
+
+Example component styles:
+
 ```tsx
 // Component code
 
@@ -29,7 +45,6 @@ import { css, ct } from "../../styled-system/css";
 
 <div className={css({
   display: 'flex',
-  // Token paths are fully typed
   background: ct('alert.background')
 })}>
 ```
