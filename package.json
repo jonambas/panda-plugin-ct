@@ -52,7 +52,7 @@
     "@types/node": "20.14.15",
     "@vitest/coverage-v8": "1.6.0",
     "prettier": "3.3.3",
-    "tsup": "8.1.0",
+    "tsup": "8.2.4",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },
