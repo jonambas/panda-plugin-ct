@@ -44,7 +44,7 @@
     "base": "bun ./apps/fixtures/make.ts gen -s base"
   },
   "dependencies": {
-    "ts-morph": "22.0.0"
+    "ts-morph": "23.0.0"
   },
   "devDependencies": {
     "@pandacss/types": "0.45.1",
