@@ -47,7 +47,7 @@
     "ts-morph": "22.0.0"
   },
   "devDependencies": {
-    "@pandacss/types": "0.41.0",
+    "@pandacss/types": "0.45.1",
     "@playwright/test": "1.46.1",
     "@types/node": "20.15.0",
     "@vitest/coverage-v8": "1.6.0",
