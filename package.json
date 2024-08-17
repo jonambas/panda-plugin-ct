@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@pandacss/types": "0.41.0",
-    "@playwright/test": "1.46.0",
+    "@playwright/test": "1.46.1",
     "@types/node": "20.14.15",
     "@vitest/coverage-v8": "1.6.0",
     "prettier": "3.3.3",
